@@ -2,4 +2,7 @@
 <resources>
     <color name="widget_background">#1B1B1F</color>
     <color name="widget_text">#FFFFFF</color>
+    <color name="widget_text_critical">#F44336</color>
+    <color name="widget_text_low">#FFA726</color>
+    <color name="widget_text_charging">#4CAF50</color>
 </resources>

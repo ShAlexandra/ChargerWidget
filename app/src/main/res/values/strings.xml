@@ -2,7 +2,5 @@
 <resources>
     <string name="app_name">Заряд виджет</string>
     <string name="widget_description">Крупно показывает заряд батареи. Обновляется при подключении/отключении зарядки, по нажатию на виджет и раз в 30 минут.</string>
-    <string name="status_charging">заряжается</string>
-    <string name="status_not_charging">от батареи</string>
     <string name="main_activity_hint">Чтобы добавить виджет, зажмите пустое место на главном экране → «Виджеты» → «Заряд виджет».</string>
 </resources>

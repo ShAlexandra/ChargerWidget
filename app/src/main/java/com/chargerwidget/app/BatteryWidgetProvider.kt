@@ -8,7 +8,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
+import android.view.View
 import android.widget.RemoteViews
+import androidx.core.content.ContextCompat
 
 /**
  * Виджет с крупной цифрой процента заряда батареи.
@@ -30,6 +32,10 @@ class BatteryWidgetProvider : AppWidgetProvider() {
     companion object {
         const val ACTION_REFRESH_CLICK = "com.chargerwidget.app.ACTION_REFRESH_CLICK"
 
+        // Пороги в процентах: <= CRITICAL — красный, <= LOW — оранжевый, иначе обычный цвет.
+        private const val CRITICAL_THRESHOLD = 15
+        private const val LOW_THRESHOLD = 30
+
         fun updateAllWidgets(context: Context) {
             val manager = AppWidgetManager.getInstance(context)
             val ids = manager.getAppWidgetIds(
@@ -45,12 +51,18 @@ class BatteryWidgetProvider : AppWidgetProvider() {
 
             val percentText = if (percent in 0..100) "$percent%" else "--%"
             views.setTextViewText(R.id.widget_percent, percentText)
-            views.setTextViewText(
-                R.id.widget_status,
-                context.getString(
-                    if (isCharging) R.string.status_charging else R.string.status_not_charging
-                )
+            views.setViewVisibility(
+                R.id.widget_charging_icon,
+                if (isCharging) View.VISIBLE else View.GONE
             )
+
+            val colorRes = when {
+                isCharging -> R.color.widget_text_charging
+                percent in 0..CRITICAL_THRESHOLD -> R.color.widget_text_critical
+                percent in 0..LOW_THRESHOLD -> R.color.widget_text_low
+                else -> R.color.widget_text
+            }
+            views.setTextColor(R.id.widget_percent, ContextCompat.getColor(context, colorRes))
 
             // requestCode = widgetId, чтобы у каждого экземпляра виджета на столе
             // был свой уникальный PendingIntent и клики не путались между собой.
