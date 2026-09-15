@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Нужно, чтобы виджет мог обновиться сразу после перезагрузки телефона -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ChargerWidget">
+
+        <!-- Пустая activity: показывается только если открыть приложение из лаунчера,
+             сам виджет от неё не зависит -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".BatteryWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <!-- Штатное периодическое обновление (раз в 30 минут, см. battery_widget_info.xml) -->
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <!-- Разрешённые системой к статической регистрации "мгновенные" события -->
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <!-- Наше собственное событие: клик пользователя по виджету -->
+                <action android:name="com.chargerwidget.app.ACTION_REFRESH_CLICK" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/battery_widget_info" />
+        </receiver>
+
+    </application>
+
+</manifest>
