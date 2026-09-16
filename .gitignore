@@ -20,3 +20,7 @@ out/
 
 # Log Files
 *.log
+
+# Release signing (never commit keys/passwords)
+keystore.properties
+keystore/
